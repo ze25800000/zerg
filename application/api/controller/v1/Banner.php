@@ -13,18 +13,20 @@ class Banner {
      * id banner的id号
      */
     public function getBanner($id) {
-        $data = [
-            'id' => $id
-        ];
-        /*$validate = new Validate([
-            'id' => ''
-        ]);*/
-        $validate = new IDMustBePostiveInt();
-        $result   = $validate->batch()->check($data);
-        if ($result) {
-
-        } else {
-
-        }
+        (new IDMustBePostiveInt())->goCheck();
+        $c = 1;
+//        $data = [
+//            'id' => $id
+//        ];
+//        /*$validate = new Validate([
+//            'id' => ''
+//        ]);*/
+//        $validate = new IDMustBePostiveInt();
+//        $result   = $validate->batch()->check($data);
+//        if ($result) {
+//
+//        } else {
+//
+//        }
     }
 }

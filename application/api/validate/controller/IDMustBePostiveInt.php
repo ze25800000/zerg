@@ -5,7 +5,7 @@ namespace app\api\validate\controller;
 
 use think\Validate;
 
-class IDMustBePostiveInt extends Validate {
+class IDMustBePostiveInt extends BaseValidate {
     protected $rule = [
         'id' => 'require|isPositiveInteger'
     ];
