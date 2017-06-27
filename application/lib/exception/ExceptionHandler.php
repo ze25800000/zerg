@@ -5,6 +5,7 @@ namespace app\lib\exception;
 
 use Exception;
 use think\exception\Handle;
+use think\Log;
 use think\Request;
 
 /**自定义tp5错误处理类，重写handle
@@ -26,6 +27,7 @@ class ExceptionHandler extends Handle {
             $this->code      = 500;
             $this->msg       = '服务器内部错误';
             $this->errorCode = 999;
+            $this->recordErrorLog($e);
         }
         $request = Request::instance();
         $result  = [
@@ -34,6 +36,16 @@ class ExceptionHandler extends Handle {
             'request_url' => $request->url()
         ];
         return json($result, $this->code);
+    }
 
+    private function recordErrorLog(Exception $e) {
+        //初始化对象
+        Log::init([
+            'type'  => 'File',
+            'path'  => LOG_PATH,
+            'level' => ['error']
+        ]);
+        //定义错误级别为error
+        Log::record($e->getMessage(), 'error');
     }
 }
