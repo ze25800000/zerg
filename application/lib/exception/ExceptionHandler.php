@@ -4,6 +4,7 @@ namespace app\lib\exception;
 
 
 use Exception;
+use think\Config;
 use think\exception\Handle;
 use think\Log;
 use think\Request;
@@ -24,10 +25,16 @@ class ExceptionHandler extends Handle {
             $this->msg       = $e->msg;
             $this->errorCode = $e->errorCode;
         } else {
-            $this->code      = 500;
-            $this->msg       = '服务器内部错误';
-            $this->errorCode = 999;
-            $this->recordErrorLog($e);
+            //用config.php中的app_debug来控制是否开启tp5自带的错误显示方式
+            //Config::get('app_debug');读取app_debug另一种方法
+            if (config('app_debug')) {
+                return parent::render($e);
+            } else {
+                $this->code      = 500;
+                $this->msg       = '服务器内部错误';
+                $this->errorCode = 999;
+                $this->recordErrorLog($e);
+            }
         }
         $request = Request::instance();
         $result  = [
