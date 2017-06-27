@@ -14,8 +14,9 @@ class BaseValidate extends Validate {
         $result = $this->check($params);
         if (!$result) {
             //获取错误信息
-            $e      = new ParameterException();
-            $e->msg = $this->error;
+            $e = new ParameterException([
+                'msg' => $this->error
+            ]);
             throw $e;
         } else {
             return true;
