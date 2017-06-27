@@ -7,7 +7,8 @@ use think\Validate;
 
 class IDMustBePostiveInt extends BaseValidate {
     protected $rule = [
-        'id' => 'require|isPositiveInteger'
+        'id'  => 'require|isPositiveInteger',
+        'num' => 'in:1,2,3'
     ];
 
     protected function isPositiveInteger($value, $rule = '', $data = '', $field = '') {
