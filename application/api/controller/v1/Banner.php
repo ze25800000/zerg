@@ -14,16 +14,7 @@ class Banner {
      */
     public function getBanner($id) {
         (new IDMustBePostiveInt())->goCheck();
-        try {
-            $banner = BannerModel::getBannerByID($id);
-        } catch (Exception $ex) {
-            $err = [
-                'error_code' => 10001,
-                'msg'        => $ex->getMessage(),
-            ];
-            //使用tp5的json吧数组转换为json，第二个参数为返回错误码，默认为200
-            return json($err,400);
-        }
+        $banner = BannerModel::getBannerByID($id);
         return $banner;
     }
 }
