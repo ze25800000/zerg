@@ -12,6 +12,7 @@ class Banner {
 //            ->where('banner_id', '=', $id)
 //            ->select();
         $result = Db::table('banner_item')
+//            ->fetchSql()
             ->where(function ($query) use ($id) {
                 $query->where('banner_id', '=', $id);
             })
