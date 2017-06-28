@@ -3,8 +3,6 @@
 namespace app\lib\exception;
 
 
-use Exception;
-use think\Config;
 use think\exception\Handle;
 use think\Log;
 use think\Request;
@@ -19,7 +17,7 @@ class ExceptionHandler extends Handle {
     private $errorCode;
 
     //当controller中的异常没有处理时，错误处理会自动执行render
-    public function render(Exception $e) {
+    public function render(\Exception $e) {
         if ($e instanceof BaseException) {
             $this->code      = $e->code;
             $this->msg       = $e->msg;
@@ -45,7 +43,7 @@ class ExceptionHandler extends Handle {
         return json($result, $this->code);
     }
 
-    private function recordErrorLog(Exception $e) {
+    private function recordErrorLog(\Exception $e) {
         //初始化对象
         Log::init([
             'type'  => 'File',
