@@ -3,17 +3,11 @@
 namespace app\api\model;
 
 
-use think\Exception;
+use think\Db;
 
 class Banner {
     public static function getBannerByID($id) {
-        //TODO  根据id号获取banner信息
-//        try {
-//            1 / 1;
-//        } catch (Exception $ex) {
-//            throw $ex;
-//        }
-        return null;
-
+        $result = Db::query('select * from banner_item where banner_id=?', [$id]);
+        return $result;
     }
 }
