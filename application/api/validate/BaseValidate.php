@@ -1,6 +1,6 @@
 <?php
 
-namespace app\api\validate\controller;
+namespace app\api\validate;
 
 use app\lib\exception\ParameterException;
 use think\Request;
@@ -21,5 +21,15 @@ class BaseValidate extends Validate {
         } else {
             return true;
         }
+    }
+
+    protected function isPositiveInteger($value, $rule = '', $data = '', $field = '') {
+        if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
+            return true;
+        } else {
+//            return $field . '必须是正整数';
+            return false;
+        }
+
     }
 }
