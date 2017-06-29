@@ -9,11 +9,7 @@ use app\lib\exception\BannerMissException;
 class Banner {
     public function getBanner($id) {
         (new IDMustBePostiveInt())->goCheck();
-        //返回对象而不是数组
-//        $banner = BannerModel::getBannerByID($id);
-        $banner = BannerModel::with(['items', 'items.img'])->find($id);
-//        $banner = new BannerModel();
-//        $banner = $banner->get($id);
+        $banner = BannerModel::getBannerByID($id);
         if (!$banner) {
             throw new BannerMissException();
         }
