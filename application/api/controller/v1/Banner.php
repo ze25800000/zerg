@@ -11,7 +11,7 @@ class Banner {
         (new IDMustBePostiveInt())->goCheck();
         //返回对象而不是数组
 //        $banner = BannerModel::getBannerByID($id);
-        $banner = BannerModel::get($id);
+        $banner = BannerModel::with(['items', 'items.img'])->find($id);
 //        $banner = new BannerModel();
 //        $banner = $banner->get($id);
         if (!$banner) {
