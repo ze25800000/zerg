@@ -5,6 +5,9 @@ namespace app\api\model;
 use think\Model;
 
 class Image extends Model {
-    protected $hidden = ['update_time', 'delete_time', 'from'];
+    protected $hidden = ['update_time', 'delete_time', 'from', 'id'];
 
+    public function getUrlAttr($value) {
+        return config('setting.img_prefix') . $value;
+    }
 }
