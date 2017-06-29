@@ -17,4 +17,8 @@ class Theme {
         }
         return $Theme;
     }
+
+    public function getComplexOne($id) {
+        return 'success';
+    }
 }
