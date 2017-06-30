@@ -7,7 +7,7 @@ use app\lib\exception\CategoryException;
 
 class Category {
     public function getAllCategories() {
-        $categories = CategoryModel::all([], 'img');
+        $categories = CategoryModel::with(['img'])->select();
         if (!$categories) {
             throw new CategoryException();
         }
