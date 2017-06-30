@@ -14,8 +14,8 @@ class Product {
         if (!$products) {
             throw new ProductException();
         }
-        $collection = collection($products);
-        $products = $collection->hidden(['summary']);
+//        $collection = collection($products);
+        $products = $products->hidden(['summary']);
         return $products;
     }
 }
