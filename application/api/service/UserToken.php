@@ -48,6 +48,18 @@ class UserToken {
         } else {
             $uid = $this->newUser($openid);
         }
+        $cachedValue = $this->prepareCachedValue($wxResult, $uid);
+    }
+
+    private function saveToCache($cachedValue) {
+        $key = generateToken();
+    }
+
+    private function prepareCachedValue($wxResult, $uid) {
+        $cachedValue          = $wxResult;
+        $cachedValue['uid']   = $uid;
+        $cachedValue['scope'] = 16;
+        return $cachedValue;
     }
 
     private function newUser($openid) {
