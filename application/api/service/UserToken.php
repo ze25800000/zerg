@@ -5,6 +5,7 @@ namespace app\api\service;
 
 use app\lib\exception\WeChatException;
 use think\Exception;
+use app\api\model\User as UserModel;
 
 class UserToken {
     protected $code;
@@ -41,7 +42,19 @@ class UserToken {
         //生成令牌，准备缓存数据，写入缓存
         //把令牌返回到客户端去
         $openid = $wxResult['openid'];
+        $user   = UserModel::getByOpenID($openid);
+        if ($user) {
+            $uid = $user->id;
+        } else {
+            $uid = $this->newUser($openid);
+        }
+    }
 
+    private function newUser($openid) {
+        $user = UserModel::create([
+            'openid' => $openid
+        ]);
+        return $user->id;
     }
 
     private function processLoginError($wxResult) {
