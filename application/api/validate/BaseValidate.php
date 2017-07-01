@@ -14,10 +14,9 @@ class BaseValidate extends Validate {
         $result = $this->batch()->check($params);
         if (!$result) {
             //获取错误信息
-            $e = new ParameterException([
+            throw new ParameterException([
                 'msg' => $this->error
             ]);
-            throw $e;
         } else {
             return true;
         }
@@ -27,7 +26,6 @@ class BaseValidate extends Validate {
         if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
             return true;
         } else {
-//            return $field . '必须是正整数';
             return false;
         }
 
