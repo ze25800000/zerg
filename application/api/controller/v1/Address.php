@@ -30,6 +30,6 @@ class Address {
             $user->address->save($dataArray);
         }
 //        return $user;
-        return new SuccessMessage();
+        return json(new SuccessMessage(), 201);
     }
 }
