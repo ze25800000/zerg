@@ -7,24 +7,29 @@ use app\api\validate\AddressNew;
 use app\api\service\Token as TokenService;
 use app\api\model\User as UserModel;
 use app\api\validate\UserException;
+use app\lib\enum\ScopeEnum;
+use app\lib\exception\ForbiddenException;
 use app\lib\exception\SuccessMessage;
+use app\lib\exception\TokenException;
 use think\Controller;
 
 class Address extends Controller {
     protected $beforeActionList = [
-        'first' => ['only' => 'second,third'],
+        'checkPrimaryScope' => ['only' => 'createOrUpdateAddress']
     ];
 
-    protected function first() {
-        echo 'first';
-    }
-
-    public function second() {
-        echo 'second';
-    }
-
-    public function third() {
-        echo 'third';
+    protected function checkPrimaryScope() {
+        $scope = TokenService::getCurrentTokenVar('scope');
+        if ($scope) {
+            if ($scope >= ScopeEnum::User) {
+                return true;
+            } else {
+                //抛出异常之后不会再执行createOrUpdateAddress接口
+                throw new ForbiddenException();
+            }
+        } else {
+            throw new TokenException();
+        }
     }
 
     public function createOrUpdateAddress() {

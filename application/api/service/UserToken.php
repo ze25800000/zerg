@@ -70,8 +70,8 @@ class UserToken {
     }
 
     private function prepareCachedValue($wxResult, $uid) {
-        $cachedValue          = $wxResult;
-        $cachedValue['uid']   = $uid;
+        $cachedValue        = $wxResult;
+        $cachedValue['uid'] = $uid;
         $cachedValue['scope'] = ScopeEnum::User;
         return $cachedValue;
     }
