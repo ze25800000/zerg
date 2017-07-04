@@ -30,6 +30,8 @@ class Order {
         }
         //开始创建订单
         $orderSnap = $this->snapOrder($status);
+        $order     = $this->createOrder($orderSnap);
+        return $order;
     }
 
     private function createOrder($snap) {
