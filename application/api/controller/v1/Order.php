@@ -5,6 +5,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\validate\OrderPlace;
+use app\api\service\Token as TokenService;
 
 class Order extends BaseController {
     //用户在选择商品后，向API提交包含它所选择商品的相关信息
@@ -22,5 +23,8 @@ class Order extends BaseController {
 
     public function placeOrder() {
         (new OrderPlace())->goCheck();
+        //post.products如果想获取数组，必须在后面加 /a
+        $products = input('post.products/a');
+        $uid      = TokenService::getCurrentUid();
     }
 }
