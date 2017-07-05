@@ -181,10 +181,9 @@ class Order {
             array_push($oPIDs, $item['product_id']);
         }
         //如果database中的数据集返回类型 设置为collection，则最后加上toArray()，转为数组
-        $products   = Product::all($oPIDs);
-        $collection = collection($products)
+        $products   = collection(Product::all($oPIDs))
             ->visible(['id', 'price', 'stock', 'name', 'main_img_url'])
             ->toArray();
-        return $collection;
+        return $products;
     }
 }
