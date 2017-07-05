@@ -59,7 +59,7 @@ class Order {
             $orderProduct->saveAll($this->oProducts);
             return [
                 'order_no'    => $orderNo,
-                'order_id'    => $orderNo,
+                'order_id'    => $orderID,
                 'create_time' => $create_time
             ];
         } catch (Exception $ex) {
@@ -90,7 +90,7 @@ class Order {
         $snap['snapName']    = $this->products[0]['name'];
         $snap['snapImg']     = $this->products[0]['main_img_url'];
         if (count($this->products) > 1) {
-            $snap['name'] .= '等';
+            $snap['snapName'] .= '等';
         }
         return $snap;
     }
@@ -124,7 +124,7 @@ class Order {
                 $status['pass'] = false;
             }
             $status['orderPrice'] += $pStatus['totalPrice'];
-            $status['totalCount'] += $pStatus['Count'];
+            $status['totalCount'] += $pStatus['count'];
             array_push($status['pStatusArray'], $pStatus);
         }
         return $status;
@@ -168,8 +168,10 @@ class Order {
             array_push($oPIDs, $item['product_id']);
         }
         //如果database中的数据集返回类型 设置为collection，则最后加上toArray()，转为数组
-        $products = Product::all([$oPIDs])
-            ->visible(['id', 'price', 'stock', 'name', 'main_img_url']);
-        return $products;
+        $products   = Product::all($oPIDs);
+        $collection = collection($products)
+            ->visible(['id', 'price', 'stock', 'name', 'main_img_url'])
+            ->toArray();
+        return $collection;
     }
 }
