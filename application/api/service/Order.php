@@ -30,8 +30,9 @@ class Order {
             return $status;
         }
         //开始创建订单
-        $orderSnap = $this->snapOrder($status);
-        $order     = $this->createOrder($orderSnap);
+        $orderSnap     = $this->snapOrder($status);
+        $order         = $this->createOrder($orderSnap);
+        $order['pass'] = true;
         return $order;
     }
 
@@ -112,7 +113,7 @@ class Order {
     }
 
     public function checkOrderStock($orderID) {
-        $oProducts       = OrderProduct::where('order_id', '=', '$orderID')
+        $oProducts       = OrderProduct::where('order_id', '=', $orderID)
             ->select();
         $this->oProducts = $oProducts;
         $this->products  = $this->getProductsByOrder($oProducts);
@@ -181,7 +182,7 @@ class Order {
             array_push($oPIDs, $item['product_id']);
         }
         //如果database中的数据集返回类型 设置为collection，则最后加上toArray()，转为数组
-        $products   = collection(Product::all($oPIDs))
+        $products = collection(Product::all($oPIDs))
             ->visible(['id', 'price', 'stock', 'name', 'main_img_url'])
             ->toArray();
         return $products;

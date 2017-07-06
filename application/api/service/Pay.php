@@ -13,7 +13,7 @@ use think\Loader;
 use think\Log;
 
 //            文件夹.文件名前半部分  extend文件夹目录      文件名后半部分
-Loader::import('WxPay.Wxpay', EXTEND_PATH, '.Api.php');
+Loader::import('WxPay.WxPay', EXTEND_PATH, '.Api.php');
 
 class Pay {
     private $orderID;
@@ -38,7 +38,7 @@ class Pay {
             //如果没有通过，返回状态信息，后面的代码不再执行
             return $status;
         }
-
+        return $this->makeWxPreOrder($status['orderPrice']);
     }
 
     private function makeWxPreOrder($totalPrice) {
@@ -52,7 +52,8 @@ class Pay {
         $wxOrderData->SetTotal_fee($totalPrice * 100);
         $wxOrderData->SetBody('零食商贩');
         $wxOrderData->SetOpenid($openid);
-        $wxOrderData->SetNotify_url('');
+        $wxOrderData->SetNotify_url('http://qq.com');
+        return $this->getPaySignature($wxOrderData);
     }
 
     private function getPaySignature($wxOrderData) {
@@ -61,6 +62,13 @@ class Pay {
             Log::record($wxOrder, 'error');
             Log::record('获取预支付订单失败', 'error');
         }
+        $this->recordPreOrder($wxOrder);
+        return null;
+    }
+
+    private function recordPreOrder($wxOrder) {
+        OrderModel::where('id', '=', $this->orderID)
+            ->update(['prepay_id' => $wxOrder['prepay_id']]);
     }
 
     private function checkOrderValid() {
