@@ -9,6 +9,10 @@ use app\lib\exception\TokenException;
 use think\Exception;
 use app\api\model\Order as OrderModel;
 use app\api\service\Order as OrderService;
+use think\Loader;
+
+//            文件夹.文件名前半部分  extend文件夹目录      文件名后半部分
+Loader::import('WxPay.Wxpay', EXTEND_PATH, '.Api.php');
 
 class Pay {
     private $orderID;
@@ -37,7 +41,11 @@ class Pay {
     }
 
     private function makeWxPreOrder() {
-
+        $openid = Token::getCurrentTokenVar('openid');
+        if (!$openid) {
+            throw new TokenException();
+        }
+        $wxOrderData = new \WxPayUnifiedOrder();
     }
 
     private function checkOrderValid() {
