@@ -10,6 +10,7 @@ use think\Exception;
 use app\api\model\Order as OrderModel;
 use app\api\service\Order as OrderService;
 use think\Loader;
+use think\Log;
 
 //            文件夹.文件名前半部分  extend文件夹目录      文件名后半部分
 Loader::import('WxPay.Wxpay', EXTEND_PATH, '.Api.php');
@@ -40,12 +41,26 @@ class Pay {
 
     }
 
-    private function makeWxPreOrder() {
+    private function makeWxPreOrder($totalPrice) {
         $openid = Token::getCurrentTokenVar('openid');
         if (!$openid) {
             throw new TokenException();
         }
         $wxOrderData = new \WxPayUnifiedOrder();
+        $wxOrderData->SetOut_trade_no($this->orderNO);
+        $wxOrderData->SetTrade_type('JSAPI');
+        $wxOrderData->SetTotal_fee($totalPrice * 100);
+        $wxOrderData->SetBody('零食商贩');
+        $wxOrderData->SetOpenid($openid);
+        $wxOrderData->SetNotify_url('');
+    }
+
+    private function getPaySignature($wxOrderData) {
+        $wxOrder = \WxPayApi::unifiedOrder($wxOrderData);
+        if (!$wxOrder['return_code'] != 'SUCCESS' || $wxOrderData['result_code'] != 'SUCCESS') {
+            Log::record($wxOrder, 'error');
+            Log::record('获取预支付订单失败', 'error');
+        }
     }
 
     private function checkOrderValid() {
