@@ -4,11 +4,13 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\validate\IDMustBePostiveInt;
 use app\api\validate\OrderPlace;
 use app\api\service\Token as TokenService;
 use app\api\service\Order as OrderService;
 use app\api\model\Order as OrderModel;
 use app\api\validate\PageingParameter;
+use app\lib\exception\OrderException;
 
 class Order extends BaseController {
     //用户在选择商品后，向API提交包含它所选择商品的相关信息
@@ -21,7 +23,8 @@ class Order extends BaseController {
     //成功：也需要进行库存量检测
     //成功：进行库存量的扣除
     protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'placeOrder']
+        'checkExclusiveScope' => ['only' => 'placeOrder'],
+        'checkPrimaryScope'   => ['only' => 'getSummaryByUser,getDetail']
     ];
 
     public function getSummaryByUser($page = 1, $size = 15) {
@@ -39,6 +42,15 @@ class Order extends BaseController {
             'data'         => $data,
             'current_page' => $pagingOrders->getCurrentPage(),
         ];
+    }
+
+    public function getDetail($id) {
+        (new IDMustBePostiveInt())->goCheck();
+        $orderDetail = OrderModel::get($id)->hidden(['prepay_id']);
+        if (!$orderDetail) {
+            throw new OrderException();
+        }
+        return $orderDetail;
     }
 
     public function placeOrder() {
