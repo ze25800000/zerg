@@ -7,6 +7,8 @@ use app\api\controller\BaseController;
 use app\api\validate\OrderPlace;
 use app\api\service\Token as TokenService;
 use app\api\service\Order as OrderService;
+use app\api\model\Order as OrderModel;
+use app\api\validate\PageingParameter;
 
 class Order extends BaseController {
     //用户在选择商品后，向API提交包含它所选择商品的相关信息
@@ -21,6 +23,23 @@ class Order extends BaseController {
     protected $beforeActionList = [
         'checkExclusiveScope' => ['only' => 'placeOrder']
     ];
+
+    public function getSummaryByUser($page = 1, $size = 15) {
+        (new PageingParameter())->goCheck();
+        $uid          = TokenService::getCurrentUid();
+        $pagingOrders = OrderModel::getSummaryByUser($uid, $page, $size);
+        if (!$pagingOrders) {
+            return [
+                'data'         => [],
+                'current_page' => $pagingOrders->getCurrentPage(),
+            ];
+        }
+        $data = $pagingOrders->toArray();
+        return [
+            'data'         => $data,
+            'current_page' => $pagingOrders->getCurrentPage(),
+        ];
+    }
 
     public function placeOrder() {
         (new OrderPlace())->goCheck();
