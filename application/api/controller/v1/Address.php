@@ -13,7 +13,7 @@ use app\lib\exception\SuccessMessage;
 
 class Address extends BaseController {
     protected $beforeActionList = [
-        'checkPrimaryScope' => ['only' => 'createOrUpdateAddress']
+        'checkPrimaryScope' => ['only' => 'createOrUpdateAddress,getUserAddress']
     ];
 
     public function getUserAddress() {
