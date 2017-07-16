@@ -44,6 +44,22 @@ class Order extends BaseController {
         ];
     }
 
+    public function getSummary($page = 1, $size = 0) {
+        (new PageingParameter())->goCheck();
+        $pagingOrders = OrderModel::getSummaryByPage($page, $size);
+        if (!$pagingOrders) {
+            return [
+                'current_page' => $pagingOrders->currentPage(),
+                'data'         => []
+            ];
+        }
+        $data = $pagingOrders->toArray();
+        return [
+            'current_page' => $pagingOrders->currentPage(),
+            'data'         => $data
+        ];
+    }
+
     public function getDetail($id) {
         (new IDMustBePostiveInt())->goCheck();
         $orderDetail = OrderModel::get($id)->hidden(['prepay_id']);

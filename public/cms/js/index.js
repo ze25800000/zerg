@@ -29,7 +29,7 @@ $(function(){
 
     /*拼接html字符串*/
     function getOrderHtmlStr(res){
-        var data = res.data;
+        var data = res.data.data;
         if (data){
             var len = data.length,
                 str = '', item;
